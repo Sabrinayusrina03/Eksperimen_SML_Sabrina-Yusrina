@@ -1,0 +1,49 @@
+name: Automatic Dataset Preprocessing
+
+on:
+  push:
+    # Trigger saat ada push ke branch utama
+    branches:
+      - main
+  # Memungkinkan trigger manual dari halaman GitHub Actions
+  workflow_dispatch:
+
+jobs:
+  run_preprocessing_and_commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (Fetch full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy scikit-learn
+
+      - name: Run Preprocessing Script
+        run: |
+          echo "Running automate_SabrinaYusrina.py..."
+          python preprocessing/automate_SabrinaYusrina.py
+
+      - name: Commit and Push Updated Dataset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add dataset_preprocessing
+
+          if git status --porcelain | grep dataset_preprocessing; then
+              echo "Changes detected in preprocessed dataset. Committing and pushing..."
+              git commit -m "chore(data): Update preprocessed dataset via GitHub Action run ${{ github.sha }}"
+              git push
+          else
+              echo "No changes in preprocessed dataset. Skipping commit."
+          fi
