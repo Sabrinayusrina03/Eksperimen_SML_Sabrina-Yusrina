@@ -1,6 +1,7 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+import matplotlib.pyplot as plt
 import os
 import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -74,3 +75,34 @@ with mlflow.start_run():
     print("Best alpha:", grid.best_params_)
     print("MAE:", mae)
     print("R2:", r2)
+
+    # Artefak 1: Residual Plot
+    # Hitung Residual
+    residuals = y_test - y_pred
+
+    # Buat Plot
+    fig, ax = plt.subplots()
+    ax.scatter(y_pred, residuals, edgecolors=(0, 0, 0))
+    ax.axhline(y=0, color='r', linestyle='--')
+    ax.set_xlabel('Predicted Values')
+    ax.set_ylabel('Residuals')
+    ax.set_title('Residual Plot')
+
+    # Log Plot ke DagsHub
+    mlflow.log_figure(fig, "Residual_Plot.png")
+
+    plt.close(fig)
+
+    #Artefak 2: Metrics Text File (.txt)
+    metrics_file_path = "model_metrics_summary.txt"
+
+    with open(metrics_file_path, 'w') as f:
+        f.write(f"Model: {type(model).__name__}\n")
+        f.write("-" * 25 + "\n")
+        f.write(f"MAE (Mean Absolute Error): {mean_absolute_error(y_test, y_pred)}\n")
+        f.write(f"R2 Score: {r2_score(y_test, y_pred)}\n")
+
+    # Log file teks ke DagsHub
+    mlflow.log_artifact(metrics_file_path)
+
+    os.remove(metrics_file_path)
