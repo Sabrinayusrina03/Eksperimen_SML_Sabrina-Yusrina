@@ -11,6 +11,8 @@ on:
 jobs:
   run_preprocessing_and_commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository (Fetch full history)
@@ -34,18 +36,10 @@ jobs:
           python preprocessing/automate_SabrinaYusrina.py
 
       - name: Commit and Push Updated Dataset
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git rm -r --cached preprocessing || true
-          
-          git add preprocessing
-
-          if git status --porcelain | grep dataset_preprocessing; then
-              echo "Changes detected in preprocessed dataset. Committing and pushing..."
-              git commit -m "chore(data): Update preprocessed dataset via GitHub Action run ${{ github.sha }}"
-              git push
-          else
-              echo "No changes in preprocessed dataset. Skipping commit."
-          fi
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: "preprocessing/laptop_clean.csv"
+          message: "chore(data): Update preprocessed dataset via GitHub Action run (Final Fix)"
+          author_name: github-actions[bot]
+          author_email: github-actions[bot]@users.noreply.github.com
+          default_author: github_actions
