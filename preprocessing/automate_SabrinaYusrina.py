@@ -7,7 +7,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 # KONFIGURASI FILE PATH
 INPUT_FILE_PATH = 'dataset_raw/laptops.csv'
-OUTPUT_DIR = 'dataset_preprocessing'
+OUTPUT_DIR = 'preprocessing'
 OUTPUT_FILE_PATH = os.path.join(OUTPUT_DIR, 'laptop_clean.csv')
 TARGET_COLUMN = 'Price_euros'
 
