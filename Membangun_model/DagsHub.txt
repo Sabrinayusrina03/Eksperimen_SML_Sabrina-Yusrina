@@ -1,0 +1,3 @@
+DagsHub Username: Sabrinayusrina03
+DagsHub Repo Name: eksperimen_SML_SabrinaYusrina
+MLflow Tracking URI: https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
