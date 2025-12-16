@@ -49,7 +49,7 @@ def main():
     try:
         # 1. Baca Data Mentah
         print(f"\nMembaca data dari: {INPUT_FILE_PATH}")
-        df = pd.read_csv(INPUT_FILE_PATH)
+        df = pd.read_csv(INPUT_FILE_PATH, encoding='latin-1')
 
         # 2. Cleaning Dasar
         df_cleaned = clean_data_and_prepare_for_transform(df)
