@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
+import sys
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -109,11 +110,13 @@ def main():
         print(f"Data siap latih disimpan di: {OUTPUT_FILE_PATH}")
         print(f"Bentuk data hasil preprocessing: {df_processed.shape}")
 
-    except FileNotFoundError:
-        print(f"❌ ERROR: File input tidak ditemukan di {INPUT_FILE_PATH}")
+    except FileNotFoundError as e:
+        print(f"❌ ERROR FILE NOT FOUND: Pastikan file data mentah ada di repositori: {e}")
+        sys.exit(1) # Keluar dengan kode error 1
     except Exception as e:
-        print(f"❌ ERROR: Terjadi kesalahan saat preprocessing: {e}")
-        # raise e # uncomment this if debugging locally
+        print(f"❌ FATAL ERROR IN PYTHON SCRIPT: {e}")
+        # Hentikan workflow dan cetak error detail
+        raise e
 
 if __name__ == "__main__":
     main()
