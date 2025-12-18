@@ -4,12 +4,18 @@ import mlflow.sklearn
 import matplotlib.pyplot as plt
 import os
 import numpy as np
+import argparse
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, r2_score
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--data_path", type=str, default="../laptop_clean.csv")
+args = parser.parse_args()
 
 # Konfigurasi User
 os.environ["MLFLOW_TRACKING_USERNAME"] = "Sabrinayusrina03" 
@@ -18,8 +24,7 @@ os.environ["MLFLOW_TRACKING_USERNAME"] = "Sabrinayusrina03"
 mlflow.set_tracking_uri("https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow")
 
 # Load data clean
-DATA_PATH = 'preprocessing/laptop_clean.csv' 
-df = pd.read_csv(DATA_PATH)
+df = pd.read_csv(args.data_path)
 
 X = df.drop(columns=["Price_euros"])
 y = df["Price_euros"]
@@ -97,7 +102,7 @@ with mlflow.start_run():
     metrics_file_path = "model_metrics_summary.txt"
 
     with open(metrics_file_path, 'w') as f:
-        f.write(f"Model: {type(model).__name__}\n")
+        f.write(f"Model: {type(best_model).__name__}\n") 
         f.write("-" * 25 + "\n")
         f.write(f"MAE (Mean Absolute Error): {mean_absolute_error(y_test, y_pred)}\n")
         f.write(f"R2 Score: {r2_score(y_test, y_pred)}\n")
