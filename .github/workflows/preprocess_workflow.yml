@@ -2,10 +2,8 @@ name: Automatic Dataset Preprocessing
 
 on:
   push:
-    # Trigger saat ada push ke branch utama
     branches:
       - main
-  # Memungkinkan trigger manual dari halaman GitHub Actions
   workflow_dispatch:
 
 jobs:
@@ -28,12 +26,18 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy scikit-learn
+          pip install pandas numpy scikit-learn mlflow matplotlib dagshub
 
       - name: Run Preprocessing Script
         run: |
           echo "Running automate_SabrinaYusrina.py..."
           python preprocessing/automate_SabrinaYusrina.py
+
+      - name: Run Modelling and Log to DagsHub
+        env:
+          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+        run: |
+          python Membangun_model/modelling_tuning.py --data_path preprocessing/laptop_clean.csv
 
       - name: Commit and Push Updated Dataset
         uses: EndBug/add-and-commit@v9
