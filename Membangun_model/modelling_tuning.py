@@ -18,7 +18,8 @@ parser.add_argument("--data_path", type=str, default="../laptop_clean.csv")
 args = parser.parse_args()
 
 # Konfigurasi User
-os.environ["MLFLOW_TRACKING_USERNAME"] = "Sabrinayusrina03" 
+os.environ["MLFLOW_TRACKING_USERNAME"] = "Sabrinayusrina03"
+os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_TOKEN", "")
 
 # Konfigurasi URI
 mlflow.set_tracking_uri("https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow")
